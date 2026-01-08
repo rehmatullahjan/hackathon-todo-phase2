@@ -2,9 +2,9 @@ from fastapi import FastAPI, Depends, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session
 from typing import List, Optional
-from .database import create_db_and_tables, get_session
-from .models import Task, TaskCreate, TaskUpdate, TaskStatus, TaskPriority
-from . import crud
+from database import create_db_and_tables, get_session
+from models import Task, TaskCreate, TaskUpdate, TaskStatus, TaskPriority
+import crud
 from contextlib import asynccontextmanager
 
 @asynccontextmanager

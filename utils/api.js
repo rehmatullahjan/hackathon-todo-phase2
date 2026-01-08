@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:8000', // FastAPI default port
+    baseURL: '/api', // Works for both local (via proxy/rewrites) and deployed
     headers: {
         'Content-Type': 'application/json',
     },
