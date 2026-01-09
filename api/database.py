@@ -6,8 +6,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Get DATABASE_URL from environment or default to SQLite
-# Note: On Vercel, SQLite is transient (resets on every deploy)
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./database.db")
+# Note: On Vercel, the filesystem is read-only. We use /tmp for SQLite if no external DB is provided.
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if not DATABASE_URL:
+    if os.getenv("VERCEL"):
+        DATABASE_URL = "sqlite:////tmp/database.db"
+    else:
+        DATABASE_URL = "sqlite:///./database.db"
 
 # Create engine with appropriate settings
 if DATABASE_URL.startswith("sqlite"):

@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session
 from typing import List, Optional
-from database import create_db_and_tables, get_session
+from database import create_db_and_tables, get_session, DATABASE_URL
 from models import Task, TaskCreate, TaskUpdate, TaskStatus, TaskPriority
 import crud
 from contextlib import asynccontextmanager
@@ -17,11 +17,16 @@ app = FastAPI(lifespan=lifespan, title="Hackathon Todo API", version="2.0.0")
 # Add CORS middleware to allow frontend communication
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["*"], # Allow all for deployment debugging
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/api/status")
+@app.get("/status")
+def status():
+    return {"status": "ok", "version": "2.0.0", "database": DATABASE_URL.split(":")[0]}
 
 @app.post("/tasks", response_model=Task)
 def create_task(task: TaskCreate, session: Session = Depends(get_session)):
