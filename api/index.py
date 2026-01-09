@@ -2,9 +2,9 @@ from fastapi import FastAPI, Depends, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session
 from typing import List, Optional
-from database import create_db_and_tables, get_session, DATABASE_URL
-from models import Task, TaskCreate, TaskUpdate, TaskStatus, TaskPriority
-import crud
+from api.database import create_db_and_tables, get_session, DATABASE_URL
+from api.models import Task, TaskCreate, TaskUpdate, TaskStatus, TaskPriority
+import api.crud as crud
 from contextlib import asynccontextmanager
 
 @asynccontextmanager
@@ -12,7 +12,7 @@ async def lifespan(app: FastAPI):
     create_db_and_tables()
     yield
 
-app = FastAPI(lifespan=lifespan, title="Hackathon Todo API", version="2.0.0")
+app = FastAPI(lifespan=lifespan, title="Hackathon Todo API", version="2.0.0", root_path="/api")
 
 # Add CORS middleware to allow frontend communication
 app.add_middleware(
@@ -23,7 +23,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/api/status")
 @app.get("/status")
 def status():
     return {"status": "ok", "version": "2.0.0", "database": DATABASE_URL.split(":")[0]}

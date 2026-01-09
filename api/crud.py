@@ -1,6 +1,6 @@
 from sqlmodel import Session, select, col, or_
 from typing import List, Optional
-from models import Task, TaskCreate, TaskUpdate, TaskStatus, TaskPriority
+from api.models import Task, TaskCreate, TaskUpdate, TaskStatus, TaskPriority
 from datetime import datetime
 
 def create_task(session: Session, task_create: TaskCreate) -> Task:
